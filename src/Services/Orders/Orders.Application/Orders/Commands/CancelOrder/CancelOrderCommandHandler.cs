@@ -7,17 +7,24 @@ namespace Orders.Application.Orders.Commands.CancelOrder;
 public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Result<OrderDto>>
 {
     private readonly IOrderRepository _repository;
+    private readonly ICurrentUserService _currentUser;
 
-    public CancelOrderCommandHandler(IOrderRepository repository)
+    public CancelOrderCommandHandler(IOrderRepository repository, ICurrentUserService currentUser)
     {
         _repository = repository;
+        _currentUser = currentUser;
     }
 
     public async Task<Result<OrderDto>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (order is null)
-            return Result<OrderDto>.Failure("Pedido não encontrado.");
+            return Result<OrderDto>.Failure(OrderErrors.NotFoundOrNotOwned);
+
+        var isOwner = _currentUser.UserId == order.UserId;
+        var isAdmin = _currentUser.IsInRole("Admin");
+        if (!isOwner && !isAdmin)
+            return Result<OrderDto>.Failure(OrderErrors.NotFoundOrNotOwned);
 
         try
         {

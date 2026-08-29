@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Orders.Application.Common;
 using Orders.Application.Orders;
 using Orders.Application.Products;
 using Orders.Infrastructure.Clients;
+using Orders.Infrastructure.Identity;
 using Orders.Infrastructure.Persistence;
 using Orders.Infrastructure.Persistence.Repositories;
 
@@ -31,6 +34,9 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(catalogBaseUrl);
         })
         .AddHttpMessageHandler<CatalogServiceTokenHandler>();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }

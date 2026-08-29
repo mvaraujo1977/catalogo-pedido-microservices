@@ -11,6 +11,7 @@
   },
   "users": [
     {
+      "id": "11111111-1111-4111-8111-111111111111",
       "username": "admin-test",
       "firstName": "Admin",
       "lastName": "Teste",
@@ -23,6 +24,7 @@
       "realmRoles": ["Admin"]
     },
     {
+      "id": "22222222-2222-4222-8222-222222222222",
       "username": "customer-test",
       "firstName": "Customer",
       "lastName": "Teste",
@@ -31,6 +33,19 @@
       "email": "customer-test@catalogopedido.com",
       "credentials": [
         { "type": "password", "value": "Customer@123", "temporary": false }
+      ],
+      "realmRoles": ["Customer"]
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "username": "other-customer-test",
+      "firstName": "Other",
+      "lastName": "Customer",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "other-customer-test@catalogopedido.com",
+      "credentials": [
+        { "type": "password", "value": "Other@123", "temporary": false }
       ],
       "realmRoles": ["Customer"]
     }
@@ -54,6 +69,17 @@
           "consentRequired": false,
           "config": {
             "included.client.audience": "catalogo-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "name": "orders-api-audience-mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "orders-api",
             "id.token.claim": "false",
             "access.token.claim": "true"
           }

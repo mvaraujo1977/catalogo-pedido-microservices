@@ -16,3 +16,7 @@ services:
       - postgres
     networks:
       - pedidos-network
+
+  keycloak:
+    ports:
+      - "8080:8080"

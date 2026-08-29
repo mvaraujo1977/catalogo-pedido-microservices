@@ -17,6 +17,19 @@ services:
     networks:
       - pedidos-network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7
+    container_name: pedidos-keycloak
+    restart: unless-stopped
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    command: start-dev --import-realm
+    volumes:
+      - ./src/Services/Identity/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    networks:
+      - pedidos-network
+
 volumes:
   postgres_data:
 

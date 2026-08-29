@@ -6,12 +6,14 @@ using Catalog.Application.Products.Dtos;
 using Catalog.Application.Products.Queries.GetProductById;
 using Catalog.Application.Products.Queries.GetProducts;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers;
 
 [ApiController]
 [Route("api/v1/products")]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +23,7 @@ public class ProductsController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateProductCommand command, CancellationToken cancellationToken)
     {
@@ -42,6 +45,7 @@ public class ProductsController : ControllerBase
         return ToActionResult(result, Ok);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateProductCommand command, CancellationToken cancellationToken)
     {
@@ -52,6 +56,7 @@ public class ProductsController : ControllerBase
         return ToActionResult(result, Ok);
     }
 
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

@@ -30,8 +30,27 @@ services:
     networks:
       - pedidos-network
 
+  rabbitmq:
+    image: rabbitmq:4.3.6-management-alpine
+    container_name: pedidos-rabbitmq
+    hostname: pedidos-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pedidos-network
+
 volumes:
   postgres_data:
+  rabbitmq_data:
 
 networks:
   pedidos-network:

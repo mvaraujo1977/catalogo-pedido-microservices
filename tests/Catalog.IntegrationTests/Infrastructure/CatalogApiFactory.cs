@@ -1,3 +1,4 @@
+using BuildingBlocks.Messaging;
 using Catalog.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,13 @@ public class CatalogApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
             services.AddAuthentication(TestAuthHandler.SchemeName)
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.SchemeName, options => { });
+
+            // Sem isso, cada teste tentaria abrir conexão TCP com o
+            // RabbitMQ e esperaria o timeout.
+            services.RemoveAll(typeof(IEventPublisher));
+            services.AddSingleton<IEventPublisher, FakeEventPublisher>();
+
+            services.RemoveAll(typeof(Microsoft.Extensions.Hosting.IHostedService));
         });
     }
 

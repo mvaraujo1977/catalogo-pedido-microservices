@@ -1,9 +1,12 @@
+using BuildingBlocks.Messaging;
 using Catalog.Application.Products;
+using Catalog.Infrastructure.Messaging;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Catalog.Infrastructure;
 
@@ -18,6 +21,9 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString));
 
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        services.AddEventBus(configuration);
+        services.AddHostedService<OrderEventsConsumer>();
 
         return services;
     }

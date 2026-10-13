@@ -1,4 +1,3 @@
-using BuildingBlocks.Messaging;
 using Orders.API.Authentication;
 using Orders.Application;
 using Orders.Infrastructure;
@@ -17,7 +16,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddEventBus(builder.Configuration);
 
 var keycloakAuthority = builder.Configuration["Keycloak:Authority"]
     ?? throw new InvalidOperationException("Keycloak:Authority não configurado.");

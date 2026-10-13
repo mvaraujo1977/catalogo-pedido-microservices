@@ -16,4 +16,11 @@ public class EventBusOptions
     /// os testes possam usar uma exchange isolada.
     /// </summary>
     public string ExchangeName { get; set; } = "catalogopedido.events";
+
+    /// <summary>
+    /// Nome que identifica esta aplicação na UI do RabbitMQ. Sem isso,
+    /// todas as conexões aparecem com o mesmo nome e não se sabe qual
+    /// serviço é qual ao depurar.
+    /// </summary>
+    public string ClientName { get; set; } = "catalogopedido";
 }

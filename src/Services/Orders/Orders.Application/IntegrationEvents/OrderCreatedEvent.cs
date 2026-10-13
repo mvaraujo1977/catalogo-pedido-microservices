@@ -20,3 +20,7 @@ public static class OrderRoutingKeys
     public const string Confirmed = "order.confirmed";
     public const string Cancelled = "order.cancelled";
 }
+
+public record OrderConfirmedEvent(Guid OrderId, Guid UserId, decimal TotalAmount);
+
+public record OrderCancelledEvent(Guid OrderId, Guid UserId);

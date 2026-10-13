@@ -1,12 +1,15 @@
+using BuildingBlocks.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Orders.Application.Common;
 using Orders.Application.Orders;
 using Orders.Application.Products;
 using Orders.Infrastructure.Clients;
 using Orders.Infrastructure.Identity;
+using Orders.Infrastructure.Messaging;
 using Orders.Infrastructure.Persistence;
 using Orders.Infrastructure.Persistence.Repositories;
 
@@ -37,6 +40,9 @@ public static class DependencyInjection
 
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        services.AddEventBus(configuration);
+        services.AddHostedService<StockEventsConsumer>();
 
         return services;
     }
